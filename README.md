@@ -1,4 +1,4 @@
-# Solidpixels Tetra — Aviation Plugins
+# Solidpixels Tetra  Aviation Plugins
 
 Live-traffic displays for the [Solidpixels Tetra](https://solidpixels.io) 64×32 LED matrix, built around Phoenix Sky Harbor (KPHX) but configurable for any airport. Real ADS-B data in, animated pixel art out.
 
@@ -78,8 +78,8 @@ Each plugin reads `.env` locally and `[vars]` in `wrangler.toml` on Cloudflare. 
 
 | Variable | Meaning | Default |
 | --- | --- | --- |
-| `SOLIDPIXELS_API_TOKEN` | API key (secret) | — |
-| `SOLIDPIXELS_DEVICE_ID` | Your device | — |
+| `SOLIDPIXELS_API_TOKEN` | API key (secret) |  |
+| `SOLIDPIXELS_DEVICE_ID` | Your device |  |
 | `LAT`, `LON` | Centre point of the display | KPHX (`33.4342`, `-112.0116`) |
 | `FIELD_ELEV_FT` | Airport elevation, for altitude-above-ground and alerts | `1135` |
 | `TIME_ZONE` | IANA zone for clocks and day/night | `America/Phoenix` |
