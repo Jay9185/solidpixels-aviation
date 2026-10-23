@@ -1,14 +1,32 @@
-# Solidpixels Tetra  Aviation Plugins
+# Solidpixels Tetra Aviation Plugins
 
-Live-traffic displays for the [Solidpixels Tetra](https://solidpixels.io) 64×32 LED matrix, built around Phoenix Sky Harbor (KPHX) but configurable for any airport. Real ADS-B data in, animated pixel art out.
+Live-traffic displays for the [Solidpixels Tetra](https://solidpixels.io) 64x32 LED matrix, built around Phoenix Sky Harbor (KPHX) but configurable for any airport. Real ADS-B data in, animated pixel art out.
+
+<table>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="https://github.com/user-attachments/assets/e209fe80-3ca8-4c4b-802d-e264ea2ce227" alt="Tetra display, wide shot" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="54%" align="center" valign="top">
+      <img src="https://github.com/user-attachments/assets/4f60075a-832e-43d7-be3f-61f97d66f260" alt="Tetra display, photo 1" width="100%">
+      <br>
+      <img src="https://github.com/user-attachments/assets/5239ffeb-1d27-4b3f-84f0-1d838af7b037" alt="Tetra display, photo 2" width="100%">
+    </td>
+    <td width="46%" align="center" valign="top">
+      <img src="https://github.com/user-attachments/assets/b0f8a333-d691-4de1-b5b9-15855f8dfddd" alt="Tetra display, portrait shot" width="100%">
+    </td>
+  </tr>
+</table>
 
 | Plugin | What it shows |
 | --- | --- |
 | **`radar-ppi/`** | A round PPI scope with a rotating sweep, fading targets with heading leaders and trails, red alerts for low and close traffic, and the nearest target's flight level in the corner. |
-| **`split-flap/`** | A Solari-style board, 3 rows × 16 flaps, with real **arrivals / departures** (route lookup) or a callsign / type / altitude "overhead" board. |
+| **`split-flap/`** | A Solari-style board, 3 rows x 16 flaps, with real **arrivals and departures** (route lookup) or a callsign, type and altitude "overhead" board. |
 | **`livery-spotter/`** | The nearest aircraft as a pixel sprite in its airline's colours (A320, 737, 747, A380, 787, 777, A350, plus GA trainers) over a looping desert scene with day, dusk and night variants. |
 
-Each plugin is a **separate project** with its own copy of the shared modules. Run, deploy or delete any of them without touching the others. No npm dependencies; Node 18+ only.
+Each plugin is a **separate project** with its own copy of the shared modules. Run, deploy or delete any of them without touching the others. No npm dependencies, Node 18+ only.
 
 > **Status:** rendering, GIF encoding and the Worker bundles are tested. Live ADS-B and route lookups depend on third-party community APIs and are best confirmed on your own machine (see [Troubleshooting](#troubleshooting)).
 
@@ -78,14 +96,14 @@ Each plugin reads `.env` locally and `[vars]` in `wrangler.toml` on Cloudflare. 
 
 | Variable | Meaning | Default |
 | --- | --- | --- |
-| `SOLIDPIXELS_API_TOKEN` | API key (secret) |  |
-| `SOLIDPIXELS_DEVICE_ID` | Your device |  |
+| `SOLIDPIXELS_API_TOKEN` | API key (secret) | none |
+| `SOLIDPIXELS_DEVICE_ID` | Your device | none |
 | `LAT`, `LON` | Centre point of the display | KPHX (`33.4342`, `-112.0116`) |
-| `FIELD_ELEV_FT` | Airport elevation, for altitude-above-ground and alerts | `1135` |
+| `FIELD_ELEV_FT` | Airport elevation, for altitude above ground and alerts | `1135` |
 | `TIME_ZONE` | IANA zone for clocks and day/night | `America/Phoenix` |
-| `LABEL` | 3–4 letter label on the display | `PHX` |
-| `RANGE_NM` | Radius of traffic to fetch / show, in nm | radar `20`, board `40`, spotter `15` |
-| `INTERVAL_S` | Seconds between updates for `--watch` (local only) | `20`–`60` |
+| `LABEL` | 3 to 4 letter label on the display | `PHX` |
+| `RANGE_NM` | Radius of traffic to fetch and show, in nm | radar `20`, board `40`, spotter `15` |
+| `INTERVAL_S` | Seconds between updates for `--watch` (local only) | `20` to `60` |
 | `INSTALLATION_ID` | The slot this plugin owns in the device rotation | per plugin |
 
 Plugin-specific:
@@ -127,8 +145,8 @@ Target colours: cyan = airliner, amber = GA, green = helicopter, purple = milita
 
 ```bash
 cd split-flap
-node local.js --demo                        # arrivals/departures with demo routes
-node local.js --board overhead --demo       # callsign / type / altitude
+node local.js --demo                        # arrivals and departures with demo routes
+node local.js --board overhead --demo       # callsign, type, altitude
 ```
 
 In `fids` mode each flight's route comes from the community routeset API (adsb.lol, with adsb.im as a fallback). Arrivals show the origin and minutes out. Departures show the destination and altitude (green climbing, orange descending). Flights without a known route fall onto a `NEAR` page.
@@ -177,7 +195,7 @@ Repeat in `split-flap/` and `livery-spotter/`.
 
 ## Native Solidpixels apps (Starlark)
 
-`native/` contains a Starlark port of the radar for the Tetra's own app runtime, plus `publish.js` to upload versions through the Apps API. See [`native/README.md`](native/README.md) for the create → upload → submit-for-review flow.
+`native/` contains a Starlark port of the radar for the Tetra's own app runtime, plus `publish.js` to upload versions through the Apps API. See [`native/README.md`](native/README.md) for the create, upload and submit-for-review flow.
 
 Native apps run on Solidpixels' servers and need no token or Cloudflare account, so they are the route for sharing a plugin with other owners. The radar port has been checked against the JS renderer in demo mode but **not yet on a real device**. The split-flap and livery spotter are not ported yet.
 
@@ -209,7 +227,7 @@ adsb.js  ->  render.js  ->  gif.js  ->  push.js
 ```
 
 - **`adsb.js`** fetches aircraft from airplanes.live, falling back to adsb.lol and adsb.fi, and normalises them (distance, offsets, climb trend, kind).
-- **`render.js`** draws into a 64×32 RGB framebuffer (`gfx.js`, with a 3×5 pixel font).
+- **`render.js`** draws into a 64x32 RGB framebuffer (`gfx.js`, with a 3x5 pixel font).
 - **`gif.js`** is a small GIF89a encoder with a typed-array LZW table, fast enough for Worker CPU limits. Output is far below the 192 KiB push limit.
 - **`push.js`** calls `POST /v1/devices/{id}/push` with a stable `installationId`, so each plugin keeps one slot. Later pushes update it with `background: true`.
 
@@ -230,7 +248,7 @@ solidpixels-aviation/
 
 | Symptom | Likely cause and fix |
 | --- | --- |
-| `fetch failed` / `ENOTFOUND` locally | No internet, or the ADS-B hosts are blocked on your network. Run with `--demo` to confirm the renderer works. |
+| `fetch failed` or `ENOTFOUND` locally | No internet, or the ADS-B hosts are blocked on your network. Run with `--demo` to confirm the renderer works. |
 | `push failed 401` | Wrong or rotated API token. Update `.env` and re-run `wrangler secret put`. |
 | `push failed 404` | Wrong `SOLIDPIXELS_DEVICE_ID`. |
 | Radar circle fills the whole screen and is cropped | Layout is `wide`. Set `LAYOUT=compact` in `.env` **and** in `wrangler.toml`, then redeploy. |
@@ -253,7 +271,7 @@ solidpixels-aviation/
 ## Data sources and credits
 
 - ADS-B traffic: [airplanes.live](https://airplanes.live), [adsb.lol](https://adsb.lol), [adsb.fi](https://adsb.fi), community feeds with their own terms and rate limits. Requests identify themselves honestly. Be gentle and don't poll faster than you need.
-- Route data: the community routeset API used by tar1090 (adsb.lol / adsb.im).
+- Route data: the community routeset API used by tar1090 (adsb.lol and adsb.im).
 - Hardware and platform: [Solidpixels](https://solidpixels.io).
 - Airline names and colours are used descriptively and no logos are reproduced. This project is not affiliated with or endorsed by any airline, aircraft manufacturer, ADS-B provider or Solidpixels.
 
@@ -261,4 +279,4 @@ solidpixels-aviation/
 
 ## License
 
-MIT, see [`LICENSE`](LICENSE). Copyright © 2026 Jay Kumar Bhatiya.
+MIT, see [`LICENSE`](LICENSE). Copyright (c) 2026 Jay Kumar Bhatiya.
