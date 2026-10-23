@@ -1,0 +1,19 @@
+{
+  "name": "radar-ppi",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "node dev.js",
+    "demo": "node local.js --demo",
+    "once": "node local.js",
+    "push": "node local.js --push",
+    "watch": "node local.js --watch --push",
+    "cf:dev": "npx wrangler dev --test-scheduled",
+    "cf:deploy": "npx wrangler deploy",
+    "cf:logs": "npx wrangler tail"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

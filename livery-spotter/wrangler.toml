@@ -1,0 +1,27 @@
+name = "tetra-livery-spotter"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[triggers]
+crons = ["* * * * *"]
+
+[vars]
+SOLIDPIXELS_DEVICE_ID = "69855bce722f6c439c0f5fd4"
+LAT = "33.4342"
+LON = "-112.0116"
+FIELD_ELEV_FT = "1135"
+TIME_ZONE = "America/Phoenix"
+RANGE_NM = "15"
+SPOT_NM = "8"
+INCLUDE_GA = "true"
+TOD = ""
+INSTALLATION_ID = "livery-spotter"
+
+# Optional: remembers the last aircraft so a new arrival interrupts only once.
+#   npx wrangler kv namespace create STATE
+# then uncomment and paste the id it prints:
+# [[kv_namespaces]]
+# binding = "STATE"
+# id = "PASTE_ID_HERE"
+
+# API token is a secret:  npx wrangler secret put SOLIDPIXELS_API_TOKEN

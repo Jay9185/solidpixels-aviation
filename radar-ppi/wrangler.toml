@@ -1,0 +1,19 @@
+name = "tetra-radar-ppi"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[triggers]
+crons = ["* * * * *"]   # every minute (Cloudflare's minimum)
+
+[vars]
+SOLIDPIXELS_DEVICE_ID = "69855bce722f6c439c0f5fd4"
+LAT = "33.4342"
+LON = "-112.0116"
+FIELD_ELEV_FT = "1135"
+TIME_ZONE = "America/Phoenix"
+LABEL = "PHX"
+LAYOUT = "compact"
+RANGE_NM = "20"
+INSTALLATION_ID = "kphx-radar-ppi"
+
+# API token is a secret:  npx wrangler secret put SOLIDPIXELS_API_TOKEN
